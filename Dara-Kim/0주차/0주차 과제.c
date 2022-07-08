@@ -1,96 +1,96 @@
-/*c¾ð¾î¿¡¼­ÀÇ ¸Þ¸ð¸® µ¿ÀûÇÒ´çÀº malloc, calloc, reallocÀ¸·Î °¡´ÉÇÔ.
+/*cì–¸ì–´ì—ì„œì˜ ë©”ëª¨ë¦¬ ë™ì í• ë‹¹ì€ malloc, calloc, reallocìœ¼ë¡œ ê°€ëŠ¥í•¨.
 
-malloc ÇÔ¼öÀÇ ¿øÇü : void* malloc(size_t size)
--- > ÇÔ¼ö È£Ãâ ½Ã ÇÒ´çÇÏ°íÀÚ ÇÏ´Â ¸Þ¸ð¸®ÀÇ Å©±â¸¦ ¹ÙÀÌÆ® ´ÜÀ§·Î Àü´ÞÇÏ¸é
-±× Å©±â¸¸Å­ ¸Þ¸ð¸®¸¦ ÇÒ´çÇÏ°Ô µÇ°í, ÇÒ´çÇÑ ¸Þ¸ð¸®ÀÇ Ã¹ ¹øÂ° ¹ÙÀÌÆ® ÁÖ¼Ò¸¦ ¸®ÅÏ.
-½ÇÆÐ ½Ã NULL ¸®ÅÏ.
+malloc í•¨ìˆ˜ì˜ ì›í˜• : void* malloc(size_t size)
+-- > í•¨ìˆ˜ í˜¸ì¶œ ì‹œ í• ë‹¹í•˜ê³ ìž í•˜ëŠ” ë©”ëª¨ë¦¬ì˜ í¬ê¸°ë¥¼ ë°”ì´íŠ¸ ë‹¨ìœ„ë¡œ ì „ë‹¬í•˜ë©´
+ê·¸ í¬ê¸°ë§Œí¼ ë©”ëª¨ë¦¬ë¥¼ í• ë‹¹í•˜ê²Œ ë˜ê³ , í• ë‹¹í•œ ë©”ëª¨ë¦¬ì˜ ì²« ë²ˆì§¸ ë°”ì´íŠ¸ ì£¼ì†Œë¥¼ ë¦¬í„´.
+ì‹¤íŒ¨ ì‹œ NULL ë¦¬í„´.
 
-calloc ÇÔ¼öÀÇ ¿øÇü : void* calloc(size_t elt_count, size_t elt_size)
--- > elt_size Å©±âÀÇ º¯¼ö¸¦ elt_count°³ ¸¸Å­ ÀúÀåÇÒ ¼ö ÀÖ´Â ¸Þ¸ð¸® °ø°£À» ÇÒ´çÇÏ°í,
-±× °ø°£ÀÇ °ªÀ» ÀüºÎ 0À¸·Î ¹Ù²Û´Ù.¸®ÅÏÀº malloc°ú µ¿ÀÏ.
+calloc í•¨ìˆ˜ì˜ ì›í˜• : void* calloc(size_t elt_count, size_t elt_size)
+-- > elt_size í¬ê¸°ì˜ ë³€ìˆ˜ë¥¼ elt_countê°œ ë§Œí¼ ì €ìž¥í•  ìˆ˜ ìžˆëŠ” ë©”ëª¨ë¦¬ ê³µê°„ì„ í• ë‹¹í•˜ê³ ,
+ê·¸ ê³µê°„ì˜ ê°’ì„ ì „ë¶€ 0ìœ¼ë¡œ ë°”ê¾¼ë‹¤.ë¦¬í„´ì€ mallocê³¼ ë™ì¼.
 
-realloc ÇÔ¼öÀÇ ¿øÇü : void* realloc(void* memblock, size_t size);
--- > ÀÌ¹Ì ÇÒ´çÇÑ Æ÷ÀÎÅÍ º¯¼ö¸¦ memblock¿¡ ³Ö°í, °ø°£ÀÇ Å©±â¸¦ size¿¡ ÀÔ·ÂµÈ °ªÀ¸·Î ¹Ù²Û´Ù.
+realloc í•¨ìˆ˜ì˜ ì›í˜• : void* realloc(void* memblock, size_t size);
+-- > ì´ë¯¸ í• ë‹¹í•œ í¬ì¸í„° ë³€ìˆ˜ë¥¼ memblockì— ë„£ê³ , ê³µê°„ì˜ í¬ê¸°ë¥¼ sizeì— ìž…ë ¥ëœ ê°’ìœ¼ë¡œ ë°”ê¾¼ë‹¤.
 
-free ÇÔ¼öÀÇ ¿øÇü : void free(void* ptr)
--- > ¸Þ¸ð¸® ÇØÁ¦ ÇÊ¼ö
+free í•¨ìˆ˜ì˜ ì›í˜• : void free(void* ptr)
+-- > ë©”ëª¨ë¦¬ í•´ì œ í•„ìˆ˜
 
-°øºÎÇÒ ¶§ Âü°íÇÑ ºí·Î±× :
+ê³µë¶€í•  ë•Œ ì°¸ê³ í•œ ë¸”ë¡œê·¸ :
 https://dsnight.tistory.com/51*/
 
-#define _CRTDBG_MAP_ALLOC // CRT Èü ÇÔ¼öÀÇ ±âº» ¹öÀüÀ» ÇØ´ç µð¹ö±× ¹öÀü¿¡ ¸ÅÇÎ
+#define _CRTDBG_MAP_ALLOC // CRT íž™ í•¨ìˆ˜ì˜ ê¸°ë³¸ ë²„ì „ì„ í•´ë‹¹ ë””ë²„ê·¸ ë²„ì „ì— ë§¤í•‘
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h> // malloc ¹× free ÇÔ¼ö°¡ ÇØ´ç µð¹ö±× ¹öÀüÀÎ _malloc_dbg ¹× _free_dbg¿¡ ¸ÅÇÎµÇ¾î ¸Þ¸ð¸® ÇÒ´ç ¹× ÇÒ´ç ÇØÁ¦¸¦ ÃßÀû °¡´ÉÇÏ°Ô µÊ
+#include <crtdbg.h> // malloc ë° free í•¨ìˆ˜ê°€ í•´ë‹¹ ë””ë²„ê·¸ ë²„ì „ì¸ _malloc_dbg ë° _free_dbgì— ë§¤í•‘ë˜ì–´ ë©”ëª¨ë¦¬ í• ë‹¹ ë° í• ë‹¹ í•´ì œë¥¼ ì¶”ì  ê°€ëŠ¥í•˜ê²Œ ë¨
 
 
 int main() {
-	int arr_1[5];	// ¹è¿­ ¼±¾ð
-	int* arr_2;		// Æ÷ÀÎÅÍ º¯¼ö ¼±¾ð
+	int arr_1[5];	// ë°°ì—´ ì„ ì–¸
+	int* arr_2;		// í¬ì¸í„° ë³€ìˆ˜ ì„ ì–¸
 	int i;
 
 	for (i = 0; i < 5; i++) {
-		arr_1[i] = i + 1;	// ¹è¿­¿¡ °ª ´ëÀÔ
+		arr_1[i] = i + 1;	// ë°°ì—´ì— ê°’ ëŒ€ìž…
 	}
 
-	arr_2 = (int*)malloc(sizeof(int) * 5);	// ¸Þ¸ð¸® ÇÒ´ç, ¹è¿­ÀÇ Å©±â¸¸Å­ ÇÒ´çÇÏ±â À§ÇØ 5¸¦ °öÇÔ
+	arr_2 = (int*)malloc(sizeof(int) * 5);	// ë©”ëª¨ë¦¬ í• ë‹¹, ë°°ì—´ì˜ í¬ê¸°ë§Œí¼ í• ë‹¹í•˜ê¸° ìœ„í•´ 5ë¥¼ ê³±í•¨
 
 	for (i = 0; i < 5; i++) {
 		arr_2[i] = arr_1[i];
 		printf("%d ", arr_2[i]);
 	}
 
-	free(arr_2);	// freeÇÔ¼ö¸¦ ÀÌ¿ëÇÏ¿© ¸Þ¸ð¸® ÇØÁ¦
+	free(arr_2);	// freeí•¨ìˆ˜ë¥¼ ì´ìš©í•˜ì—¬ ë©”ëª¨ë¦¬ í•´ì œ
 
-	_CrtDumpMemoryLeaks(); // ¾ÛÀÌ Á¾·áµÉ ¶§ ¸Þ¸ð¸® ´©¼ö º¸°í¼­¸¦ Ç¥½Ã
+	_CrtDumpMemoryLeaks(); // ì•±ì´ ì¢…ë£Œë  ë•Œ ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ ë³´ê³ ì„œë¥¼ í‘œì‹œ
 
 	return 0;
 }
 
-#define _CRTDBG_MAP_ALLOC // CRT Èü ÇÔ¼öÀÇ ±âº» ¹öÀüÀ» ÇØ´ç µð¹ö±× ¹öÀü¿¡ ¸ÅÇÎ
+#define _CRTDBG_MAP_ALLOC // CRT íž™ í•¨ìˆ˜ì˜ ê¸°ë³¸ ë²„ì „ì„ í•´ë‹¹ ë””ë²„ê·¸ ë²„ì „ì— ë§¤í•‘
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h> // malloc ¹× free ÇÔ¼ö°¡ ÇØ´ç µð¹ö±× ¹öÀüÀÎ _malloc_dbg ¹× _free_dbg¿¡ ¸ÅÇÎµÇ¾î ¸Þ¸ð¸® ÇÒ´ç ¹× ÇÒ´ç ÇØÁ¦¸¦ ÃßÀû °¡´ÉÇÏ°Ô µÊ
+#include <crtdbg.h> // malloc ë° free í•¨ìˆ˜ê°€ í•´ë‹¹ ë””ë²„ê·¸ ë²„ì „ì¸ _malloc_dbg ë° _free_dbgì— ë§¤í•‘ë˜ì–´ ë©”ëª¨ë¦¬ í• ë‹¹ ë° í• ë‹¹ í•´ì œë¥¼ ì¶”ì  ê°€ëŠ¥í•˜ê²Œ ë¨
 
 int main() {
-	int arr_1[5];	// ¹è¿­ ¼±¾ð
-	int* arr_2;		// Æ÷ÀÎÅÍ º¯¼ö ¼±¾ð
+	int arr_1[5];	// ë°°ì—´ ì„ ì–¸
+	int* arr_2;		// í¬ì¸í„° ë³€ìˆ˜ ì„ ì–¸
 	int i;
 
 	for (i = 0; i < 5; i++) {
-		arr_1[i] = i + 1;	// ¹è¿­¿¡ °ª ´ëÀÔ
+		arr_1[i] = i + 1;	// ë°°ì—´ì— ê°’ ëŒ€ìž…
 	}
 
-	//arr_2 = (int*) malloc(sizeof(int)*5);	// ¸Þ¸ð¸® ÇÒ´ç, ¹è¿­ÀÇ Å©±â¸¸Å­ ÇÒ´çÇÏ±â À§ÇØ 5¸¦ °öÇÔ
-	arr_2 = (int*)calloc(5, sizeof(int));	// sizoe(int)Å©±âÀÇ º¯¼ö¸¦ 5°³ ÀúÀåÇÒ ¼ö ÀÖ´Â °ø°£ÇÒ´ç
+	//arr_2 = (int*) malloc(sizeof(int)*5);	// ë©”ëª¨ë¦¬ í• ë‹¹, ë°°ì—´ì˜ í¬ê¸°ë§Œí¼ í• ë‹¹í•˜ê¸° ìœ„í•´ 5ë¥¼ ê³±í•¨
+	arr_2 = (int*)calloc(5, sizeof(int));	// sizeof(int)í¬ê¸°ì˜ ë³€ìˆ˜ë¥¼ 5ê°œ ì €ìž¥í•  ìˆ˜ ìžˆëŠ” ê³µê°„í• ë‹¹
 
 	for (i = 0; i < 5; i++) {
 		arr_2[i] = arr_1[i];
 		printf("%d ", arr_2[i]);
 	}
 
-	free(arr_2);	// freeÇÔ¼ö¸¦ ÀÌ¿ëÇÏ¿© ¸Þ¸ð¸® ÇØÁ¦
+	free(arr_2);	// freeí•¨ìˆ˜ë¥¼ ì´ìš©í•˜ì—¬ ë©”ëª¨ë¦¬ í•´ì œ
 
-	_CrtDumpMemoryLeaks(); // ¾ÛÀÌ Á¾·áµÉ ¶§ ¸Þ¸ð¸® ´©¼ö º¸°í¼­¸¦ Ç¥½Ã
+	_CrtDumpMemoryLeaks(); // ì•±ì´ ì¢…ë£Œë  ë•Œ ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ ë³´ê³ ì„œë¥¼ í‘œì‹œ
 
 	return 0;
 }
 
-#define _CRTDBG_MAP_ALLOC // CRT Èü ÇÔ¼öÀÇ ±âº» ¹öÀüÀ» ÇØ´ç µð¹ö±× ¹öÀü¿¡ ¸ÅÇÎ
+#define _CRTDBG_MAP_ALLOC // CRT íž™ í•¨ìˆ˜ì˜ ê¸°ë³¸ ë²„ì „ì„ í•´ë‹¹ ë””ë²„ê·¸ ë²„ì „ì— ë§¤í•‘
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h> // malloc ¹× free ÇÔ¼ö°¡ ÇØ´ç µð¹ö±× ¹öÀüÀÎ _malloc_dbg ¹× _free_dbg¿¡ ¸ÅÇÎµÇ¾î ¸Þ¸ð¸® ÇÒ´ç ¹× ÇÒ´ç ÇØÁ¦¸¦ ÃßÀû °¡´ÉÇÏ°Ô µÊ
+#include <crtdbg.h> // malloc ë° free í•¨ìˆ˜ê°€ í•´ë‹¹ ë””ë²„ê·¸ ë²„ì „ì¸ _malloc_dbg ë° _free_dbgì— ë§¤í•‘ë˜ì–´ ë©”ëª¨ë¦¬ í• ë‹¹ ë° í• ë‹¹ í•´ì œë¥¼ ì¶”ì  ê°€ëŠ¥í•˜ê²Œ ë¨
 
 int main() {
-	int arr_1[10];	// ¹è¿­ ¼±¾ð
-	int* arr_2;		// Æ÷ÀÎÅÍ º¯¼ö ¼±¾ð
+	int arr_1[10];	// ë°°ì—´ ì„ ì–¸
+	int* arr_2;		// í¬ì¸í„° ë³€ìˆ˜ ì„ ì–¸
 	int i;
 
 	for (i = 0; i < 10; i++) {
-		arr_1[i] = i + 1;	// ¹è¿­¿¡ °ª ´ëÀÔ
+		arr_1[i] = i + 1;	// ë°°ì—´ì— ê°’ ëŒ€ìž…
 	}
 
-	arr_2 = (int*)malloc(sizeof(int) * 5);	// ¸Þ¸ð¸® ÇÒ´ç, ¹è¿­ÀÇ Å©±â¸¸Å­ ÇÒ´çÇÏ±â À§ÇØ 5¸¦ °öÇÔ
+	arr_2 = (int*)malloc(sizeof(int) * 5);	// ë©”ëª¨ë¦¬ í• ë‹¹, ë°°ì—´ì˜ í¬ê¸°ë§Œí¼ í• ë‹¹í•˜ê¸° ìœ„í•´ 5ë¥¼ ê³±í•¨
 
 	for (i = 0; i < 5; i++) {
 		arr_2[i] = arr_1[i];
@@ -99,18 +99,18 @@ int main() {
 
 	printf("\n");
 
-	// sizeof(int) = 4¹ÙÀÌÆ®
-	realloc(arr_2, sizeof(int) * 10);	// arr_2ÀÇ ¸Þ¸ð¸®¸¦ 40¹ÙÀÌÆ®·Î Àç ÇÒ´ç
-	// arr_2ÀÇ ¸Þ¸ð¸® Å©±â : 20¹ÙÀÌÆ® -> 40¹ÙÀÌÆ®
+	// sizeof(int) = 4ë°”ì´íŠ¸
+	realloc(arr_2, sizeof(int) * 10);	// arr_2ì˜ ë©”ëª¨ë¦¬ë¥¼ 40ë°”ì´íŠ¸ë¡œ ìž¬ í• ë‹¹
+	// arr_2ì˜ ë©”ëª¨ë¦¬ í¬ê¸° : 20ë°”ì´íŠ¸ -> 40ë°”ì´íŠ¸
 
 	for (i = 0; i < 10; i++) {
 		arr_2[i] = arr_1[i];
 		printf("%d ", arr_2[i]);
 	}
 
-	free(arr_2);	// freeÇÔ¼ö¸¦ ÀÌ¿ëÇÏ¿© ¸Þ¸ð¸® ÇØÁ¦
+	free(arr_2);	// freeí•¨ìˆ˜ë¥¼ ì´ìš©í•˜ì—¬ ë©”ëª¨ë¦¬ í•´ì œ
 
-	_CrtDumpMemoryLeaks(); // ¾ÛÀÌ Á¾·áµÉ ¶§ ¸Þ¸ð¸® ´©¼ö º¸°í¼­¸¦ Ç¥½Ã
+	_CrtDumpMemoryLeaks(); // ì•±ì´ ì¢…ë£Œë  ë•Œ ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ ë³´ê³ ì„œë¥¼ í‘œì‹œ
 
 	return 0;
 }
