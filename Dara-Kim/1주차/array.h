@@ -11,3 +11,4 @@ int peek(int_array* array, const int index);
 int insert(int_array* array, const int index, const int value);
 void push(int_array* array, const int value);
 int delete(int_array* array, const int index);
+
