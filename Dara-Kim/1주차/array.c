@@ -13,7 +13,7 @@ void init(int_array* array, const int capacity) {
 }
 
 int peek(int_array* array, const int index) {
-    if (index < 0 && array->size < index) { // 인덱스가 배열 범위를 벗어나면 실패
+    if (index < 0 && array->size <= index) { // 인덱스가 배열 범위를 벗어나면 실패
         printf("확인하고자 하는 위치가 배열 범위를 벗어나 프로그램 종료\n");
         exit(1);
     }
@@ -23,7 +23,7 @@ int peek(int_array* array, const int index) {
 }
 
 int insert(int_array* array, const int index, const int value) {
-    if (index < 0 && array->size < index) { // 인덱스가 배열 범위를 벗어나면 연산 불가
+    if (index < 0 && array->size <= index) { // 인덱스가 배열 범위를 벗어나면 연산 불가
         return 0;
     }
 
@@ -63,7 +63,7 @@ void push(int_array* array, const int value) {
 }
 
 int delete(int_array* array, const int index) {
-    if (index < 0 && array->size < index) { // 인덱스가 배열 범위를 벗어나면 실패
+    if (index < 0 && array->size <= index) { // 인덱스가 배열 범위를 벗어나면 실패
         return 0;
     }
     if (array->size == 0) { // 배열이 비어있으면 실패
