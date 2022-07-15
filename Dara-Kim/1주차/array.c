@@ -23,7 +23,7 @@ int peek(int_array* array, const int index) {
 }
 
 int insert(int_array* array, const int index, const int value) {
-    if (index < 0 && array->size <= index) { // 인덱스가 배열 범위를 벗어나면 연산 불가
+    if (index < 0 && array->size < index) { // 인덱스가 배열 범위를 벗어나면 연산 불가
         return 0;
     }
 
