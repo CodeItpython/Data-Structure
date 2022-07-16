@@ -1,4 +1,6 @@
 #pragma once
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct int_array
 {
@@ -13,6 +15,3 @@ int insert(int_array *array, const int index, const int value);
 void push(int_array *array, const int value);
 int delete (int_array *array, const int index);
 void print_arr(int_array *array);
-
-
-
