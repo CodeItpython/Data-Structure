@@ -4,7 +4,10 @@
 
 void init(float_double_linked_list *list)
 {
-  list->head = list->tail = NULL;
+  list->head = NULL;
+  list->tail = NULL;
+  list->head->next = list->tail; //赣府 促澜篮 部府
+  list->tail->prev = list->head; //部府 菊篮 赣府
 }
 
 float_node *peek(float_double_linked_list *list, const int index)
@@ -127,8 +130,9 @@ void free_node(float_node *Node)
 void print_list(float_double_linked_list *list)
 {
   float_node *node = list->head;
-  for (; node != NULL; node = node->next)
+  while (node != NULL)
   {
     printf("%f ", node->data);
+    node = node->next;
   }
 }
