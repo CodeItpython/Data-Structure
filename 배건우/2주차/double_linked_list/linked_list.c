@@ -4,8 +4,9 @@
 
 void init(float_double_linked_list *list)
 {
-  list->head = NULL;
-  list->tail = NULL;
+
+  list->head = create_node(0);
+  list->tail = create_node(0);
   list->head->next = list->tail; //赣府 促澜篮 部府
   list->tail->prev = list->head; //部府 菊篮 赣府
 }
@@ -113,7 +114,7 @@ int delete (float_double_linked_list *list, const int index)
   }
 }
 
-float_node *create_node(int data)
+float_node *create_node(float data)
 {
   float_node *node = (float_node *)malloc(sizeof(float_node));
   node->data = data;
@@ -130,7 +131,7 @@ void free_node(float_node *Node)
 void print_list(float_double_linked_list *list)
 {
   float_node *node = list->head;
-  while (node != NULL)
+  while (node != list->tail)
   {
     printf("%f ", node->data);
     node = node->next;
