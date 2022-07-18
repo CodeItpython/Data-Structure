@@ -9,12 +9,12 @@ int main(void)
   init(L);
   insert(L, 0, 1.0);
   insert(L, 1, 2.0);
-  insert(L, 2, 3.0);
-  insert(L, 3, 4.0);
-  printf("%f\n", peek(L, 0)->data);
-  printf("%f\n", peek(L, 1)->data);
+  insert(L, 2, 4.0);
+  delete(L,2);
 
-  push_back(L, 5.0);
   print_list(L);
   return 0;
+
+
 }
+

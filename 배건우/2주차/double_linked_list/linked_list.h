@@ -25,3 +25,4 @@ void push_front(float_double_linked_list *list, const float value);
 int delete (float_double_linked_list *list, const int index);
 float_node *create_node(float data);
 void free_node(float_node *Node);
+
