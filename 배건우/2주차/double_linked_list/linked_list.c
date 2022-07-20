@@ -4,116 +4,184 @@
 
 void init(float_double_linked_list *list) // list 초기화
 {
-  float_node *head_node = (float_node *)malloc(sizeof(float_node));
-  float_node *tail_node = (float_node *)malloc(sizeof(float_node));
-  list->head = head_node;
-  list->tail = tail_node;
+  list->head = list->tail = NULL;
+  list->list_size = 0;
 }
 
 float_node *peek(float_double_linked_list *list, const int index) // index위치에있는 node리턴
 {
   float_node *peeked_node = list->head; // head를 peeked_node로 지정
-  for (int i = 0; i < index && peeked_node != NULL; ++i)
-    peeked_node = peeked_node->next;
-  return peeked_node;
+  for (int i = 0; i < index && peeked_node != NULL; ++i, peeked_node = peeked_node->next)
+    return peeked_node;
 }
 
 float_node *find(float_double_linked_list *list, const float value) // value데이터가 존재하는 노드 리턴
 {
   for (float_node *nowNode = list->head; nowNode != NULL; nowNode = nowNode->next)
   {
-    if (nowNode->data = value)
+    if (nowNode->data == value)
       return nowNode;
   }
   return NULL;
 }
 
+void push_back(float_double_linked_list *list, const float value) // tail뒤에 삽입
+{
+  float_node *newNode = create_node(value);
+  if (list->head == NULL) // head가 비어있는경우
+  {
+    list->head = list->tail = newNode;
+    list->tail->prev = newNode;
+    list->tail->next = newNode;
+  }
+  else
+  {
+    newNode->prev = list->tail;
+    newNode->next = list->tail->next;
+    list->tail->next = newNode;
+    list->head->prev = newNode;
+    list->tail = newNode;
+  }
+  list->list_size++;
+}
+
+void push_front(float_double_linked_list *list, const float value) // head앞에 삽입
+{
+  float_node *newNode = create_node(value);
+  if (list->head == NULL) // head가 비어있는경우
+  {
+    list->head = list->tail = newNode;
+    list->head->prev = newNode;
+    list->head->next = newNode;
+  }
+  else
+  {
+    newNode->prev = list->head->prev;
+    newNode->next = list->head;
+    list->head->prev = newNode;
+    list->tail->next = newNode;
+    list->head = newNode;
+  }
+  list->list_size++;
+}
+
 int insert(float_double_linked_list *list, const int index, const float value)
 {
-  float_node *target_node, *previous_node;
-  float_node *insert_node = create_node(value);
+  float_node *new_node = create_node(value);
+  float_node *current_node;
 
-  int i;
-  previous_node = NULL;
-  for (target_node = list->head, i = 0; i < index && target_node != NULL; ++i, target_node = target_node->next)
+  if (index <= list->list_size) //범위 내의 인덱스에 대해 실행
   {
-    previous_node = target_node;
-  }
-
-  if (target_node == NULL)
-  {
-    return 0;
-  }
-
-  else
-  {
-    if (index == 0) // head에 넣을경우
+    if (index == 1) // head의 앞에 삽입하고싶을때
     {
-      insert_node->next = list->head; // insert_node의 다음이 head로 지정
-      list->head->prev = insert_node; // head의 전노드가 insert_node
-      list->head = insert_node;       // head를 insert_node로 지정
+      push_front(list, value);
+      return 1;
     }
-    else //중간에 삽입하는경우
+    else if (index == list->list_size) // tail뒤에 삽입하고싶을때
     {
-      previous_node->next = insert_node; // previous_node의 다음이 insert_node로 지정
-      insert_node->next = target_node;   // insert_node의 다음이 target_node로 지정
-      insert_node->prev = previous_node; // insert_node의 전노드가 previose_node로 지정
-      target_node->prev = insert_node;   // target_node의 전노드가 insert_node로 지정
+      push_back(list, value);
+      return 1;
     }
-    return 1;
+    else //중간에 삽입하고싶을때
+    {
+      int n = index - 1;         //따로 int n을 생성해주는 이유는 index가 const int 이기때문
+      current_node = list->head; //임시의 현재 node를 head로 지정
+      while (--n)
+      { // 내가 넣고 싶은 자리 바로 앞으로 current_node가 설정된다.
+        current_node = current_node->next;
+      }
+      new_node->prev = current_node;
+      new_node->next = current_node->next;
+      current_node->next = new_node;
+      new_node->next->prev = new_node;
+      ++list->list_size;
+      return 1;
+    }
   }
+  return 0;
 }
 
-void push_back(float_double_linked_list *list, const float value)
+void delete_back(float_double_linked_list *list)
 {
-  float_node *newNode = create_node(value);
-  float_node *pre_node = list->tail->prev;
-  pre_node->next = newNode;
-  newNode->prev = pre_node;
-  newNode->next = list->tail;
-}
+  float_node *current_node;
+  float_node *tmp;
+  tmp = list->tail;
 
-void push_front(float_double_linked_list *list, const float value)
-{
-  float_node *newNode = create_node(value);
-  newNode->next = list->head;
-  list->head->prev = newNode;
-  list->head = newNode;
-}
-
-int delete (float_double_linked_list *list, const int index)
-{
-  float_node *delete_node, *previous_node;
-  int i;
-  previous_node = NULL;
-  for (delete_node = list->head, i = 0; i < index && delete_node != NULL; ++i, delete_node = delete_node->next)
+  if (tmp == NULL) // list->tail이 비어있을경우
   {
-    previous_node = delete_node;
-  }
-  if (delete_node == NULL)
-  {
-    return 0;
+    puts("list가 비어있음\n");
   }
   else
   {
-    if (index == 0) //지우려는 노드가 head일경우
-    {
-      list->head = list->head->next;
-      list->head->prev = NULL;
-    }
-    else if (delete_node == list->tail) //지우려는 노드가 tail일경우
-    {
-      list->tail = previous_node;
-      list->tail->next = NULL;
-    }
-    else //사이에있는 노드를 지울때
-    {
-      previous_node->next = delete_node->next;
-      delete_node->next->prev = previous_node;
-    }
-    free_node(delete_node);
-    return 1;
+    current_node = list->tail->prev;
+    current_node->next = list->head;
+    list->head->prev = current_node;
+    list->tail = current_node;
+    free(tmp); //할당 해제
+    list->list_size--;
   }
+}
+
+void delete_front(float_double_linked_list *list)
+{
+  float_node *current_node;
+  float_node *tmp;
+  tmp = list->head; // tmp를 list->head로 초기화
+
+  if (tmp == NULL) // list->head가 비어있는경우
+  {
+    puts("list가 비어있음\n");
+  }
+  else
+  {
+    current_node = list->head->next;
+    current_node->prev = list->head->prev;
+    list->tail->next = current_node;
+    list->head = current_node;
+    free(tmp); //할당 해제
+    list->list_size--;
+  }
+}
+
+int delete (float_double_linked_list *list, const int index) // node 삭제 메소드
+{
+  float_node *current_node;
+  float_node *tmp;
+
+  if (index <= list->list_size) //범위 내의 index에 대한 조건문
+  {
+    if (list->head == NULL) // head가 비어있는경우
+    {
+      puts("list가 비어있음\n");
+      return 0;
+    }
+    else if (index == 1) // head를 삭제하고싶은경우
+    {
+      delete_front(list);
+      return 1;
+    }
+    else if (index == list->list_size) // tail을 삭제하고싶은경우
+    {
+      delete_back(list);
+      return 1;
+    }
+    else //중간의 index를 삭제하고싶은경우
+    {
+      int n = index;
+      current_node = list->head;
+      while (--n)
+      { // 내가 지우고 싶은 자리로 current_node이 설정된다.
+        current_node = current_node->next;
+      }
+      tmp = current_node;
+      current_node->prev->next = current_node->next;
+      current_node->next->prev = current_node->prev;
+      free(tmp);
+      list->list_size--;
+      return 1;
+    }
+  }
+  return 0;
 }
 
 float_node *create_node(float data) //노드 한개를 생성하는 메소드
@@ -125,15 +193,23 @@ float_node *create_node(float data) //노드 한개를 생성하는 메소드
   return node;
 }
 
-void free_node(float_node *Node)
+void print_list(float_double_linked_list *list) // node의 data를 출력하는 메소드
 {
-  free(Node);
-}
-
-void print_list(float_double_linked_list *list)
-{
-  for (float_node *node = list->head; node != NULL; node = node->next)
+  float_node *current_node;
+  current_node = list->head;
+  if (current_node == NULL)
   {
-    printf("%f ", node->data);
+    puts("list가 비어있음\n");
   }
+  else
+  {
+    int index = 1;
+    while (index <= list->list_size) //범위내의  index에 대해
+    {
+      printf("L[%d] = %f\n", index, current_node->data);
+      current_node = current_node->next; //출력후 다음노드로 초기화
+      index++;                           // index증가
+    }
+  }
+  printf("\n");
 }
