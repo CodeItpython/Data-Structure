@@ -72,7 +72,14 @@ void push_front(float_double_linked_list* list, const float value) {
     node->previous = NULL;
 
     node->next = list->head;
-    list->head->previous = node;
+    if (list->head == NULL)
+    {
+        list->tail = node;
+    }
+    else
+    {
+        list->head->previous = node;
+    }
 
     list->head = node;
 }
