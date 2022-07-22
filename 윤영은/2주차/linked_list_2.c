@@ -35,7 +35,7 @@ int insert(float_double_linked_list* list, const int index, const float value) {
 
         if (index == 0) {
             insert_node->next = list->head;
-            list->head->previous = list->head;
+            list->head->previous = insert_node;
             list->head = insert_node;
         }
         else {

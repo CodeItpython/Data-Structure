@@ -45,6 +45,16 @@ int main() {
         printf("Failed to insert data\n");
     }
 
+    // insert = 0 테스트
+    if (insert(&example, 0, 4.9f))
+    {
+        printf("Complete to insert '4.9' to index 0\n");
+    }
+    else
+    {
+        printf("Failed to insert data\n");
+    }
+
     // delete 테스트
     printf("\n*** delete ***\n");
     if (delete(&example, 3))
@@ -91,10 +101,10 @@ int main() {
 
     // find 테스트
     printf("\n*** find ***\n");
-    float_node* find_data = find(&example, 0.7f);
+    float_node* find_data = find(&example, 0.6f);
     if (find_data == NULL)
     {
-        printf("Failed to find data 0.7\n");
+        printf("Failed to find data 0.6\n");
     }
     else
     {
