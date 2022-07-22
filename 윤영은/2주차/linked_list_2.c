@@ -24,7 +24,7 @@ int insert(float_double_linked_list* list, const int index, const float value) {
     float_node* target_node;
     int i;
     for (target_node = list->head, i = 0; i < index && target_node != NULL; ++i, target_node = target_node->next);
-    if (target_node == NULL) {
+    if (target_node == NULL && index != 0) {
         return 0;
     }
     else {
@@ -35,7 +35,14 @@ int insert(float_double_linked_list* list, const int index, const float value) {
 
         if (index == 0) {
             insert_node->next = list->head;
-            list->head->previous = insert_node;
+            if (list->head == NULL)
+            {
+                list->tail = insert_node;
+            }
+            else
+            {
+                list->head->previous = insert_node;
+            }
             list->head = insert_node;
         }
         else {
@@ -93,8 +100,15 @@ int delete(float_double_linked_list* list, const int index) {
     }
     else {
         if (index == 0) {
-            list->head = list->head->next;
-            list->head->previous = NULL;
+            if (list->head == list->tail)
+            {
+                list->head = list->tail = NULL;
+            }
+            else
+            {
+                list->head = list->head->next;
+                list->head->previous = NULL;
+            }
         }
         else if (delete_node == list->tail) {
             list->tail = delete_node->previous;
@@ -140,9 +154,12 @@ int insert_example(example_list* list, const int at, const int value) {
     }
     else {
         example_node* insert_node = create_example_node(value);
-        if (at == 0) {   //at==0 는 delete_node==list->head 와 동치;
+        if (at == 0) {   //at==0 는 delete_node==list->head 와 동치
             insert_node->next = list->head;
             list->head = insert_node;
+            if (list->tail == NULL) {
+                list->tail = insert_node;
+            }
         }
         else {
             previous_node->next = insert_node;
@@ -153,13 +170,23 @@ int insert_example(example_list* list, const int at, const int value) {
 }
 void push_back_example(example_list* list, const int value) {
     example_node* node = create_example_node(value);
-    list->tail->next = node;
-    list->tail = node;
+    if (list->head == NULL) {
+        list->head = list->tail = node;
+    }
+    else {
+        list->tail->next = node;
+        list->tail = node;
+    }
 }
 void push_front_example(example_list* list, const int value) {
     example_node* node = create_example_node(value);
-    node->next = list->head;
-    list->head = node;
+    if (list->head == NULL) {
+        list->head = list->tail = node;
+    }
+    else {
+        node->next = list->head;
+        list->head = node;
+    }
 }
 int delete_example(example_list* list, const int at) {
     example_node* delete_node, * previous_node;
@@ -174,7 +201,12 @@ int delete_example(example_list* list, const int at) {
     }
     else {
         if (at == 0) {   //at==0 는 delete_node==list->head 와 동치;
-            list->head = list->head->next;
+            if (list->head == list->tail) {
+                list->head = list->tail = NULL;
+            }
+            else {
+                list->head = list->head->next;
+            }
         }
         else if (delete_node == list->tail) {
             list->tail = previous_node;
