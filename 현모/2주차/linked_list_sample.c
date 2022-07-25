@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /*
-*  Çì´õ ÆÄÀÏ¿¡¼­ ¼±¾ðÇÑ ÇÔ¼ö¸¦ "¹Ýµå½Ã" ¿©±â¿¡ Á¤ÀÇ
+*  í—¤ë” íŒŒì¼ì—ì„œ ì„ ì–¸í•œ í•¨ìˆ˜ë¥¼ "ë°˜ë“œì‹œ" ì—¬ê¸°ì— ì •ì˜
 */
 
 void init(float_double_linked_list* list) {
@@ -29,6 +29,12 @@ float_node* find(float_double_linked_list* list, const float target) {
 
 int insert(float_double_linked_list* list, const int index, const float value) {
 	float_node* next_node = peek(list, index);
+
+	if (list->head == NULL) // ìˆ˜ì •(listê°€ ë¹„ì–´ìžˆì„ ë•Œ ì‚½ìž…)
+	{
+		push_front(list, value);
+		return 1;
+	}
 
 	if (next_node == NULL) 
 	{
@@ -60,7 +66,7 @@ int insert(float_double_linked_list* list, const int index, const float value) {
 
 void push_back(float_double_linked_list* list, const float value) {
 	float_node* node = create_node(value);
-	if (list->head == NULL) // list¿¡ ³ëµå°¡ ¾øÀ» °æ¿ì
+	if (list->head == NULL) // listì— ë…¸ë“œê°€ ì—†ì„ ê²½ìš°
 	{
 		list->head = node;
 		list->tail = node;
@@ -75,7 +81,7 @@ void push_back(float_double_linked_list* list, const float value) {
 
 void push_front(float_double_linked_list* list, const float value) {
 	float_node* node = create_node(value); 
-	if (list->head == NULL) // list¿¡ ³ëµå°¡ ¾øÀ» °æ¿ì
+	if (list->head == NULL) // listì— ë…¸ë“œê°€ ì—†ì„ ê²½ìš°
 	{
 		list->head = node;
 		list->tail = node;
@@ -97,7 +103,12 @@ int delete(float_double_linked_list* list, const int index) {
 	}
 	else
 	{
-		if (node == list->head) // index == 0;
+		if (list->head == list->tail) // ìˆ˜ì •(ë…¸ë“œê°€ 1ê°œ ìžˆì„ ë•Œ)
+		{
+			list->head = list->tail = NULL;
+			free(node);
+		}
+		else if (node == list->head) // index == 0;
 		{
 			float_node* next_node = node->next;
 
