@@ -4,13 +4,13 @@
 void init(int_array* array, const int capacity) {
 
 
-	//malloc()·Î µ¿Àû¹è¿­ÇÒ´ç
+	//malloc()ë¡œ ë™ì ë°°ì—´í• ë‹¹
 	array->arr = (int*)malloc(sizeof(int) * capacity);
-	//assert¹®
+	//assertë¬¸
 	assert(array->arr != NULL);
-	//capacity(¹è¿­Å©±â)¸¦ Á¤ÇØÁØ´Ù.
+	//capacity(ë°°ì—´í¬ê¸°)ë¥¼ ì •í•´ì¤€ë‹¤.
 	array->capacity = capacity;
-	//ÃÊ±âÈ­ size´Â 0
+	//ì´ˆê¸°í™” sizeëŠ” 0
 	array->size = 0;
 }
 
@@ -20,13 +20,13 @@ int peek(int_array* array, const int index) {
 		return array->arr[index];
 	}
 	else {
-		printf("Çã¿ëµÈ ¹üÀ§°¡ ¾Æ´Ï¿¡¿ä!");
-		exit(1); //ÇÁ·Î±×·¥ Á¾·á
+		printf("í—ˆìš©ëœ ë²”ìœ„ê°€ ì•„ë‹ˆì—ìš”!");
+		exit(1); //í”„ë¡œê·¸ëž¨ ì¢…ë£Œ
 	}
 }
 
 int insert(int_array* array, const int index, const int value) {
-	//¸¸¾à size¶û capacity°°À¸¸é push¶û µ¿ÀÏ 
+	//ë§Œì•½ sizeëž‘ capacityê°™ìœ¼ë©´ pushëž‘ ë™ì¼ 
 	if (array->size == array->capacity) {
 		int* temp = NULL;
 		temp = realloc(array->arr, sizeof(int) * (array->capacity + 5));
@@ -38,10 +38,10 @@ int insert(int_array* array, const int index, const int value) {
 			return 0;
 		}
 	}
-	//°¡´ÉÇÑ À§Ä¡(0~size)ÀÎÁö È®ÀÎ
+	//ê°€ëŠ¥í•œ ìœ„ì¹˜(0~size)ì¸ì§€ í™•ì¸
 	if (index >= 0 && index <= array->size) {
 		for (int i = array->size; i > index; i--) {
-			array->arr[i] = array->arr[i - 1];  //ÇÑ Ä­¾¿ µÚ·Î º¹»ç
+			array->arr[i] = array->arr[i - 1];  //í•œ ì¹¸ì”© ë’¤ë¡œ ë³µì‚¬
 		}
 		array->arr[index] = value; 
 		array->size++;
@@ -55,25 +55,25 @@ int insert(int_array* array, const int index, const int value) {
 
 void push(int_array* array, const int value) {
 
-	//¸¸¾à size¶û capacity°°À¸¸é reallocÀ¸·Î Å©±â +5
+	//ë§Œì•½ sizeëž‘ capacityê°™ìœ¼ë©´ reallocìœ¼ë¡œ í¬ê¸° +5
 	if (array->size == array->capacity) {
 		int* temp = NULL;
-		temp = realloc(array->arr, sizeof(int) * (array->capacity + 5)); //Å©±âÀçÇÒ´ç
+		temp = realloc(array->arr, sizeof(int) * (array->capacity + 5)); //í¬ê¸°ìž¬í• ë‹¹
 		if ( temp != NULL) {
 			array->arr = temp;
-			array->capacity = array->capacity + 5;  //capacityº¯°æ
+			array->capacity = array->capacity + 5;  //capacityë³€ê²½
 		}
 	}
 
-	array->arr[array->size] = value; //¸¶Áö¸· ÀÚ¸®¿¡ °ª ³Ö¾îÁÖ±â
-	array->size++; //»çÀÌÁî +1
+	array->arr[array->size] = value; //ë§ˆì§€ë§‰ ìžë¦¬ì— ê°’ ë„£ì–´ì£¼ê¸°
+	array->size++; //ì‚¬ì´ì¦ˆ +1
 }
 
 int delete(int_array* array, const int index) {
 	
 	if (index >= 0 && index <= array->size - 1) {
 		for (int i = index; i <  array->size-1; i++) {
-			array->arr[i] = array->arr[i+1];  //ÇÑ Ä­¾¿ ¾ÕÀ¸·Î º¹»ç
+			array->arr[i] = array->arr[i+1];  //í•œ ì¹¸ì”© ì•žìœ¼ë¡œ ë³µì‚¬
 		}
 		array->size--; 
 		return 1;
