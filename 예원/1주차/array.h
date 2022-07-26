@@ -8,7 +8,7 @@ typedef struct __int_array {
 
 }int_array;
 
-void init(int_array* array, const int capacity);    //�迭 �ʱ�ȭ
+void init(int_array* array, const int capacity);    //¹è¿­ ÃÊ±âÈ­
 int peek(int_array* array, const int index);
 int insert(int_array* array, const int index, const int value);
 void push(int_array* array, const int value);
