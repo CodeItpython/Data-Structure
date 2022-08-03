@@ -18,12 +18,6 @@ int main(int argc, const char * argv[]) {
     printf("정점 개수와 간선 수를 순서대로 입력해주세요 : ");
     scanf("%d %d", &n, &m);
     
-    graph->arr = (int **)malloc(sizeof(int *) * n);
-    for(int i = 0; i<n; i++) {
-        graph->arr[i] = (int *)malloc(sizeof(int) * n);
-    }
-    graph->visited = (bool *)malloc(sizeof(bool) * n);
-    
     init(graph, n);
     
     
