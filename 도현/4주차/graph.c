@@ -12,6 +12,13 @@
 
 // 간선 초기화
 void init(weighted_undirected_graph* graph, int n){
+    // init 내부에서 초기화
+    graph->arr = (int **)malloc(sizeof(int *) * n);
+    for(int i = 0; i<n; i++) {
+        graph->arr[i] = (int *)malloc(sizeof(int) * n);
+    }
+    graph->visited = (bool *)malloc(sizeof(bool) * n);
+    
     graph->nodeCount = n; // 정점 수 설정
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++) {
@@ -23,6 +30,7 @@ void init(weighted_undirected_graph* graph, int n){
         graph->visited[i] = false;
     }
 }
+
 
 // 간선 삽입
 void insert_edge(weighted_undirected_graph* graph, int u, int v, int w){
@@ -69,20 +77,20 @@ void DFS(weighted_undirected_graph* graph, int u){
     
     int top = -1;
     stack[++top] = u;   // 현재 정점 삽입
-    
+    graph->visited[u] = true;
    
     while(top != -1) {
         int cur = stack[top--]; // 스택 pop
-        if(!graph->visited[cur]) { // 방문하지 않았다면 방문 처리
-            graph->visited[cur] = true;
             printf("%d ", cur);
             for(int nextNode = 0; nextNode < nodeCnt; nextNode++){
                 // 방문하지 않았고 간선이 존재하면 스택에 삽입
-                if(!graph->visited[nextNode] && graph->arr[cur][nextNode] != 1001)
+                if(!graph->visited[nextNode] && graph->arr[cur][nextNode] != 1001){
+                    graph->visited[nextNode] = true;    // 스택에 넣기 전 검사를 통해 스택오버플로우 방지
                     stack[++top] = nextNode;
+                }
             }
-        }
     }
+    free(stack);    // 사용 스택 메모리 해제
     printf("\n");
 }
 
@@ -111,5 +119,6 @@ void BFS(weighted_undirected_graph* graph, int u){
             }
         }
     }
+    free(q);  // 메모리 해제
     printf("\n");
 }
