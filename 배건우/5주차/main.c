@@ -18,6 +18,10 @@ int main() {
 
     printf("peek(&heap)=%d\n", peek(&heap));    //루트노드 출력
 
+    pop(&heap);
+
+    print_heap(&heap);
+
 
     count = heap.size;
     for (int i = 0;i < count; i++) //노드를 삭제
